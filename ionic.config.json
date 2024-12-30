@@ -1,0 +1,7 @@
+{
+  "name": "environmental-dashboard-assistant",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
