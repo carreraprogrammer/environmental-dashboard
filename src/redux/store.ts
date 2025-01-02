@@ -1,15 +1,14 @@
 // src/redux/store.ts
 
-import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { configureStore } from '@reduxjs/toolkit';
 
 const initialState = {};
 
-const store = createStore(
-  rootReducer,
-  initialState,
-  composeWithDevTools(applyMiddleware())
-);
+const store = configureStore({
+  reducer: rootReducer,
+  preloadedState: initialState,
+
+});
 
 export default store;
