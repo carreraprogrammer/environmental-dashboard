@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// Configuración de la OpenAI API
 interface RequestData {
   prompt: string;
   max_tokens?: number;
