@@ -10,7 +10,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, square, triangle } from 'ionicons/icons';
+import { addOutline, ellipse, square, triangle } from 'ionicons/icons';
 import Tab1 from './components/pages/Tab1';
 import Tab2 from './components/pages/Tab2';
 import Tab3 from './components/pages/Tab3';
@@ -46,6 +46,7 @@ import '@ionic/react/css/palettes/dark.system.css';
 import './theme/variables.css';
 import { Provider } from 'react-redux';
 import store from './redux/store';
+import AddInvoice from './components/pages/AddInvoice/AddInvoice';
 
 
 setupIonicReact();
@@ -56,6 +57,9 @@ const App: React.FC = () => (
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
+            <Route exact path="/addInvoice">
+              <AddInvoice />
+            </Route>
             <Route exact path="/tab1">
               <Tab1 />
             </Route>
@@ -70,6 +74,10 @@ const App: React.FC = () => (
             </Route>
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
+            <IonTabButton tab="addInvoice" href="/addInvoice">
+              <IonIcon aria-hidden="true" icon={addOutline} />
+              <IonLabel>Add Invoice</IonLabel>
+            </IonTabButton>
             <IonTabButton tab="tab1" href="/tab1">
               <IonIcon aria-hidden="true" icon={triangle} />
               <IonLabel>Tab 1</IonLabel>
