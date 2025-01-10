@@ -1,19 +1,24 @@
 import React from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import MainPagesLayout from '../../layouts/MainLayout/MainLayout';
 import ImagesInput from '../../atoms/ImageInput/ImageInput';
+import { useAnalyzeImage } from '../../../hooks/useAnalyzeImage';
 
 const InvoiceForm: React.FC = () => {
 
   const [imageUrl, setImageUrl] = React.useState('assets/images/no-image.jpg');
+  const { data, status, error, analyze, reset } = useAnalyzeImage();
+
+  const handleAnalyze = () => {
+    analyze(imageUrl);
+  }
 
 
   return (
-    <div>
+    <div >
       <ImagesInput
         imageUrl={imageUrl}
         setImageUrl={setImageUrl}
       />
+      <button onClick={handleAnalyze}>Analyze</button>
     </div>
       
   );

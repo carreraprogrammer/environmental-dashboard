@@ -1,15 +1,10 @@
-// src/redux/store.ts
-
-import { createStore, applyMiddleware } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from './reducers';
-import { composeWithDevTools } from 'redux-devtools-extension';
 
-const initialState = {};
+export type AppDispatch = typeof store.dispatch;
 
-const store = createStore(
-  rootReducer,
-  initialState,
-  composeWithDevTools(applyMiddleware())
-);
+const store = configureStore({
+  reducer: rootReducer,
+});
 
 export default store;

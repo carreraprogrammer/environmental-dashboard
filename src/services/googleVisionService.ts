@@ -1,55 +1,49 @@
+// services/googleVisionService.ts
 import axios from 'axios';
+import environment from '../../environment';
+import { RequestData, GoogleVisionResponse } from '../types/googleVision';
 
-// Configuración de la Google Vision API
-interface Image {
-  content: string;
-}
+class GoogleVisionService {
+  private readonly apiUrl: string;
+  private readonly apiKey: string;
 
-interface Feature {
-  type: string;
-  maxResults: number;
-}
-
-interface Request {
-  image: Image;
-  features: Feature[];
-}
-
-interface RequestData {
-  requests: Request[];
-}
-
-interface GoogleVisionResponse {
-  data: any; // You can replace 'any' with a more specific type if you know the structure of the response
-}
-
-const googleVisionService = async (imagePath: string): Promise<GoogleVisionResponse> => {
-  const apiKey = 'YOUR_GOOGLE_VISION_API_KEY';  // Reemplaza con tu API key de Google Vision
-  const url = `https://vision.googleapis.com/v1/images:annotate?key=${apiKey}`;
-
-  const requestData: RequestData = {
-    requests: [
-      {
-        image: {
-          content: imagePath,  // Ruta o base64 de la imagen
-        },
-        features: [
-          {
-            type: 'LABEL_DETECTION', // Puedes cambiar el tipo de análisis según necesites
-            maxResults: 10,
-          },
-        ],
-      },
-    ],
-  };
-
-  try {
-    const response: GoogleVisionResponse = await axios.post(url, requestData);
-    return response.data; // Devuelve los resultados de la API
-  } catch (error) {
-    console.error('Error calling Google Vision API:', error);
-    throw error;
+  constructor() {
+    this.apiKey = environment.VISION_API_KEY;
+    this.apiUrl = `https://vision.googleapis.com/v1/images:annotate?key=${this.apiKey}`;
   }
-};
 
-export default googleVisionService;
+  private isBase64(str: string): boolean {
+    try {
+      return btoa(atob(str)) === str;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  public async analyzeImage(imagePath: string): Promise<GoogleVisionResponse> {
+    if (!this.isBase64(imagePath)) {
+      throw new Error('The provided image is not in base64 format');
+    }
+
+    const requestData: RequestData = {
+      requests: [{
+        image: {
+          content: imagePath,
+        },
+        features: [{
+          type: 'TEXT_DETECTION',
+          maxResults: 10,
+        }],
+      }],
+    };
+
+    try {
+      const response = await axios.post(this.apiUrl, requestData);
+      return response.data;
+    } catch (error: any) {
+      throw new Error(`Failed to analyze image: ${error.message}`);
+    }
+  }
+}
+
+export const googleVisionService = new GoogleVisionService();
