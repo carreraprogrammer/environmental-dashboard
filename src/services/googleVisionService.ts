@@ -1,7 +1,7 @@
 // services/googleVisionService.ts
 import axios from 'axios';
 import environment from '../../environment';
-import { RequestData, GoogleVisionResponse } from '../types/googleVision';
+import { RequestData, GoogleVisionResponse, FullTextAnnotation } from '../types/googleVision';
 
 class GoogleVisionService {
   private readonly apiUrl: string;
@@ -20,7 +20,7 @@ class GoogleVisionService {
     }
   }
 
-  public async analyzeImage(imagePath: string): Promise<GoogleVisionResponse> {
+  public async analyzeImage(imagePath: string): Promise<FullTextAnnotation> {
     if (!this.isBase64(imagePath)) {
       throw new Error('The provided image is not in base64 format');
     }
@@ -31,7 +31,7 @@ class GoogleVisionService {
           content: imagePath,
         },
         features: [{
-          type: 'TEXT_DETECTION',
+          type: 'DOCUMENT_TEXT_DETECTION',
           maxResults: 10,
         }],
       }],
@@ -39,7 +39,7 @@ class GoogleVisionService {
 
     try {
       const response = await axios.post(this.apiUrl, requestData);
-      return response.data;
+      return response.data.responses[0].fullTextAnnotation;
     } catch (error: any) {
       throw new Error(`Failed to analyze image: ${error.message}`);
     }

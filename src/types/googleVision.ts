@@ -22,13 +22,27 @@ interface GoogleVisionResponse {
 }
 
 interface Response {
-  labelAnnotations: LabelAnnotation[];
+  fullTextAnnotation: FullTextAnnotation;
+  textAnnotations: TextAnnotation[];
 }
 
-interface LabelAnnotation {
-  mid: string;
+export interface FullTextAnnotation {
+  text: string;
+}
+
+interface TextAnnotation {
   description: string;
-  score: number;
+  locale: string;
+  boundingPoly: BoundingPoly;
+}
+
+interface BoundingPoly {
+  vertices: Vertex[];
+}
+
+interface Vertex {
+  x: number;
+  y: number;
 }
 
 export type { RequestData, GoogleVisionResponse };

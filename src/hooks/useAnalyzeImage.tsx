@@ -1,4 +1,3 @@
-// hooks/useAnalyzeImage.ts
 import { useDispatch, useSelector } from 'react-redux';
 import { analyzeImage, resetState } from '../redux/slices/googleVisionSlice';
 import { RootState } from '../redux/reducers';
@@ -8,8 +7,14 @@ export const useAnalyzeImage = () => {
   const dispatch: AppDispatch = useDispatch();
   const { data, status, error } = useSelector((state: RootState) => state.googleVision);
 
-  const analyze = (imagePath: string) => {
-    dispatch(analyzeImage(imagePath));
+  const analyze = async (imagePath: string) => {
+    try {
+      const result = await dispatch(analyzeImage(imagePath)).unwrap();
+      return result;
+    } catch (err) {
+      console.error('Error analyzing image:', err);
+      throw err;
+    }
   };
 
   const reset = () => {
